@@ -21,12 +21,11 @@ const details = function () {
     .then((resp) => resp.json())
     .then((detailObj) => {
       divContainer.innerHTML = `
-    <h2>${detailObj.names}</h2>
+    <h2>${detailObj.name}</h2>
     <p>${detailObj.description}</p>
     <p>${detailObj.brand}</p>
-    <img>${detailObj.img}/>
+    <img src = "${detailObj.imageUrl}" class="img-fluid "alt="image"
     <p>${detailObj.price}€</p>
-    <button class="btn btn-dark mt-4">Modifica</button>
 `;
     })
     .catch((err) => console.log(err));
