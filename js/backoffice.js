@@ -2,7 +2,7 @@
 const URL = "https://striveschool-api.herokuapp.com/api/product";
 const params = new URLSearchParams(window.location.search);
 const productId = params.get("id");
-
+const method = productId ? "PUT" : "POST";
 //miei input
 const names = document.getElementById("name");
 const description = document.getElementById("description");
@@ -21,7 +21,7 @@ const changeHtml = function () {
   const deleteBtn = document.createElement("button");
   deleteBtn.className = "btn btn-danger";
   deleteBtn.innerHTML = "Elimina";
-  deleteBtn.id = "button-delete";
+  deleteBtn.id = "deleteButton";
   btnDiv.appendChild(deleteBtn);
 };
 
@@ -46,3 +46,81 @@ const form = function () {
       console.log(err);
     });
 };
+
+if (productId) {
+  changeHtml();
+  form();
+}
+
+document.getElementById("myForm").addEventListener("submit", function (e) {
+  e.preventDefault();
+
+  const product = {
+    name: names.value,
+    description: description.value,
+    brand: brand.value,
+    imageUrl: img.value,
+    price: price.value
+  };
+
+  fetch(URL, {
+    method,
+    body: JSON.stringify(product),
+    headers: {
+      Authorization:
+        "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTRkZWMxNTI1NGU4ODAwMTgzZjE4N2EiLCJpYXQiOjE2OTk2MDU1MjUsImV4cCI6MTcwMDgxNTEyNX0.4GedZJx2Bdp4WT-kQodecxPw4uTELmTO0pDCy5WwrPg",
+      "Content-Type": "application/json"
+    }
+  })
+    .then((resp) => resp.json())
+    .then((newObj) => {
+      if (productId) {
+        alert(
+          "Prodotto con id: " + newObj._id + "è stato modificato con successo!"
+        );
+      } else {
+        alert(
+          "Prodotto con id: " + newObj._id + "è stato aggiunto con successo!"
+        );
+      }
+    })
+    .catch((err) => console.log(err));
+  console.log(product);
+
+  if (!productId) {
+    names.value = "";
+    description.value = "";
+    brand.value = "";
+    img.value = "";
+    price.value = "";
+  }
+});
+
+//reset
+document.getElementById("reset").addEventListener("click", function (e) {
+  e.preventDefault();
+  if (confirm("Sicuro di voler resettare?") == true) {
+    names.value = "";
+    description.value = "";
+    brand.value = "";
+    image.value = "";
+    price.value = "";
+  }
+});
+
+//delete
+document.getElementById("deleteButton").addEventListener("click", function (e) {
+  e.preventDefault();
+
+  if (confirm("Sicuro di voler eliminare il prodotto?") == true) {
+    fetch(URL + "/" + productId, {
+      method: "DELETE"
+    })
+      .then((resp) => resp.json())
+      .then((delObj) => {
+        alert("Prodotto cancellato con successo!");
+        console.log(delObj);
+        window.location.assign("./index.html");
+      });
+  }
+});
