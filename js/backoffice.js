@@ -13,7 +13,7 @@ const price = document.getElementById("price");
 const changeHtml = function () {
   //Modifica
   document.getElementById("submit").innerText = "Modifica";
-  document.getElementById("h6").innerText = "Modifica Prodotto";
+  document.getElementById("h6").innerText = "- Modifica Prodotto";
 
   //Cancella
   const btnDiv = document.getElementById("delete");
