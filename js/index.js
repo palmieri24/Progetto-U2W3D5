@@ -30,4 +30,5 @@ fetch("https://striveschool-api.herokuapp.com/api/product", {
 
       row.appendChild(col);
     });
-  });
+  })
+  .catch((err) => console(err));
